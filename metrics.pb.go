@@ -25,8 +25,9 @@ type Event struct {
 	TargetId   string `protobuf:"bytes,2,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
 	IsProvider bool   `protobuf:"varint,3,opt,name=is_provider,json=isProvider,proto3" json:"is_provider,omitempty"`
 	// Types that are valid to be assigned to Metric:
-	//	*Event_BandwidthPayload
 	//	*Event_VersionPayload
+	//	*Event_SessionEventPayload
+	//	*Event_SessionStatisticsPayload
 	Metric               isEvent_Metric `protobuf_oneof:"metric"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_unrecognized     []byte         `json:"-"`
@@ -83,28 +84,27 @@ type isEvent_Metric interface {
 	isEvent_Metric()
 }
 
-type Event_BandwidthPayload struct {
-	BandwidthPayload *BandwidthPayload `protobuf:"bytes,4,opt,name=bandwidth_payload,json=bandwidthPayload,proto3,oneof"`
-}
-
 type Event_VersionPayload struct {
-	VersionPayload *VersionPayload `protobuf:"bytes,5,opt,name=version_payload,json=versionPayload,proto3,oneof"`
+	VersionPayload *VersionPayload `protobuf:"bytes,4,opt,name=version_payload,json=versionPayload,proto3,oneof"`
 }
 
-func (*Event_BandwidthPayload) isEvent_Metric() {}
+type Event_SessionEventPayload struct {
+	SessionEventPayload *SessionEventPayload `protobuf:"bytes,5,opt,name=session_event_payload,json=sessionEventPayload,proto3,oneof"`
+}
+
+type Event_SessionStatisticsPayload struct {
+	SessionStatisticsPayload *SessionStatisticsPayload `protobuf:"bytes,6,opt,name=session_statistics_payload,json=sessionStatisticsPayload,proto3,oneof"`
+}
 
 func (*Event_VersionPayload) isEvent_Metric() {}
+
+func (*Event_SessionEventPayload) isEvent_Metric() {}
+
+func (*Event_SessionStatisticsPayload) isEvent_Metric() {}
 
 func (m *Event) GetMetric() isEvent_Metric {
 	if m != nil {
 		return m.Metric
-	}
-	return nil
-}
-
-func (m *Event) GetBandwidthPayload() *BandwidthPayload {
-	if x, ok := m.GetMetric().(*Event_BandwidthPayload); ok {
-		return x.BandwidthPayload
 	}
 	return nil
 }
@@ -116,11 +116,26 @@ func (m *Event) GetVersionPayload() *VersionPayload {
 	return nil
 }
 
+func (m *Event) GetSessionEventPayload() *SessionEventPayload {
+	if x, ok := m.GetMetric().(*Event_SessionEventPayload); ok {
+		return x.SessionEventPayload
+	}
+	return nil
+}
+
+func (m *Event) GetSessionStatisticsPayload() *SessionStatisticsPayload {
+	if x, ok := m.GetMetric().(*Event_SessionStatisticsPayload); ok {
+		return x.SessionStatisticsPayload
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*Event) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*Event_BandwidthPayload)(nil),
 		(*Event_VersionPayload)(nil),
+		(*Event_SessionEventPayload)(nil),
+		(*Event_SessionStatisticsPayload)(nil),
 	}
 }
 
@@ -163,77 +178,206 @@ func (m *VersionPayload) GetVersion() string {
 	return ""
 }
 
-type BandwidthPayload struct {
-	Up                   float64  `protobuf:"fixed64,1,opt,name=up,proto3" json:"up,omitempty"`
-	Down                 float64  `protobuf:"fixed64,2,opt,name=down,proto3" json:"down,omitempty"`
+type SessionEventPayload struct {
+	Session              *SessionPayload `protobuf:"bytes,1,opt,name=session,proto3" json:"session,omitempty"`
+	Event                string          `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *SessionEventPayload) Reset()         { *m = SessionEventPayload{} }
+func (m *SessionEventPayload) String() string { return proto.CompactTextString(m) }
+func (*SessionEventPayload) ProtoMessage()    {}
+func (*SessionEventPayload) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6039342a2ba47b72, []int{2}
+}
+
+func (m *SessionEventPayload) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SessionEventPayload.Unmarshal(m, b)
+}
+func (m *SessionEventPayload) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SessionEventPayload.Marshal(b, m, deterministic)
+}
+func (m *SessionEventPayload) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SessionEventPayload.Merge(m, src)
+}
+func (m *SessionEventPayload) XXX_Size() int {
+	return xxx_messageInfo_SessionEventPayload.Size(m)
+}
+func (m *SessionEventPayload) XXX_DiscardUnknown() {
+	xxx_messageInfo_SessionEventPayload.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SessionEventPayload proto.InternalMessageInfo
+
+func (m *SessionEventPayload) GetSession() *SessionPayload {
+	if m != nil {
+		return m.Session
+	}
+	return nil
+}
+
+func (m *SessionEventPayload) GetEvent() string {
+	if m != nil {
+		return m.Event
+	}
+	return ""
+}
+
+type SessionStatisticsPayload struct {
+	Session              *SessionPayload `protobuf:"bytes,1,opt,name=session,proto3" json:"session,omitempty"`
+	BytesSent            uint64          `protobuf:"varint,2,opt,name=bytes_sent,json=bytesSent,proto3" json:"bytes_sent,omitempty"`
+	BytesReceived        uint64          `protobuf:"varint,3,opt,name=bytes_received,json=bytesReceived,proto3" json:"bytes_received,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *SessionStatisticsPayload) Reset()         { *m = SessionStatisticsPayload{} }
+func (m *SessionStatisticsPayload) String() string { return proto.CompactTextString(m) }
+func (*SessionStatisticsPayload) ProtoMessage()    {}
+func (*SessionStatisticsPayload) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6039342a2ba47b72, []int{3}
+}
+
+func (m *SessionStatisticsPayload) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SessionStatisticsPayload.Unmarshal(m, b)
+}
+func (m *SessionStatisticsPayload) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SessionStatisticsPayload.Marshal(b, m, deterministic)
+}
+func (m *SessionStatisticsPayload) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SessionStatisticsPayload.Merge(m, src)
+}
+func (m *SessionStatisticsPayload) XXX_Size() int {
+	return xxx_messageInfo_SessionStatisticsPayload.Size(m)
+}
+func (m *SessionStatisticsPayload) XXX_DiscardUnknown() {
+	xxx_messageInfo_SessionStatisticsPayload.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SessionStatisticsPayload proto.InternalMessageInfo
+
+func (m *SessionStatisticsPayload) GetSession() *SessionPayload {
+	if m != nil {
+		return m.Session
+	}
+	return nil
+}
+
+func (m *SessionStatisticsPayload) GetBytesSent() uint64 {
+	if m != nil {
+		return m.BytesSent
+	}
+	return 0
+}
+
+func (m *SessionStatisticsPayload) GetBytesReceived() uint64 {
+	if m != nil {
+		return m.BytesReceived
+	}
+	return 0
+}
+
+type SessionPayload struct {
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	ServiceType          string   `protobuf:"bytes,2,opt,name=service_type,json=serviceType,proto3" json:"service_type,omitempty"`
+	ProviderContry       string   `protobuf:"bytes,3,opt,name=provider_contry,json=providerContry,proto3" json:"provider_contry,omitempty"`
+	ConsumerContry       string   `protobuf:"bytes,4,opt,name=consumer_contry,json=consumerContry,proto3" json:"consumer_contry,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *BandwidthPayload) Reset()         { *m = BandwidthPayload{} }
-func (m *BandwidthPayload) String() string { return proto.CompactTextString(m) }
-func (*BandwidthPayload) ProtoMessage()    {}
-func (*BandwidthPayload) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6039342a2ba47b72, []int{2}
+func (m *SessionPayload) Reset()         { *m = SessionPayload{} }
+func (m *SessionPayload) String() string { return proto.CompactTextString(m) }
+func (*SessionPayload) ProtoMessage()    {}
+func (*SessionPayload) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6039342a2ba47b72, []int{4}
 }
 
-func (m *BandwidthPayload) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_BandwidthPayload.Unmarshal(m, b)
+func (m *SessionPayload) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SessionPayload.Unmarshal(m, b)
 }
-func (m *BandwidthPayload) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_BandwidthPayload.Marshal(b, m, deterministic)
+func (m *SessionPayload) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SessionPayload.Marshal(b, m, deterministic)
 }
-func (m *BandwidthPayload) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BandwidthPayload.Merge(m, src)
+func (m *SessionPayload) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SessionPayload.Merge(m, src)
 }
-func (m *BandwidthPayload) XXX_Size() int {
-	return xxx_messageInfo_BandwidthPayload.Size(m)
+func (m *SessionPayload) XXX_Size() int {
+	return xxx_messageInfo_SessionPayload.Size(m)
 }
-func (m *BandwidthPayload) XXX_DiscardUnknown() {
-	xxx_messageInfo_BandwidthPayload.DiscardUnknown(m)
+func (m *SessionPayload) XXX_DiscardUnknown() {
+	xxx_messageInfo_SessionPayload.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_BandwidthPayload proto.InternalMessageInfo
+var xxx_messageInfo_SessionPayload proto.InternalMessageInfo
 
-func (m *BandwidthPayload) GetUp() float64 {
+func (m *SessionPayload) GetId() string {
 	if m != nil {
-		return m.Up
+		return m.Id
 	}
-	return 0
+	return ""
 }
 
-func (m *BandwidthPayload) GetDown() float64 {
+func (m *SessionPayload) GetServiceType() string {
 	if m != nil {
-		return m.Down
+		return m.ServiceType
 	}
-	return 0
+	return ""
+}
+
+func (m *SessionPayload) GetProviderContry() string {
+	if m != nil {
+		return m.ProviderContry
+	}
+	return ""
+}
+
+func (m *SessionPayload) GetConsumerContry() string {
+	if m != nil {
+		return m.ConsumerContry
+	}
+	return ""
 }
 
 func init() {
 	proto.RegisterType((*Event)(nil), "metrics.Event")
 	proto.RegisterType((*VersionPayload)(nil), "metrics.VersionPayload")
-	proto.RegisterType((*BandwidthPayload)(nil), "metrics.BandwidthPayload")
+	proto.RegisterType((*SessionEventPayload)(nil), "metrics.SessionEventPayload")
+	proto.RegisterType((*SessionStatisticsPayload)(nil), "metrics.SessionStatisticsPayload")
+	proto.RegisterType((*SessionPayload)(nil), "metrics.SessionPayload")
 }
 
 func init() { proto.RegisterFile("metrics.proto", fileDescriptor_6039342a2ba47b72) }
 
 var fileDescriptor_6039342a2ba47b72 = []byte{
-	// 252 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x5c, 0x90, 0xcf, 0x4b, 0xc3, 0x30,
-	0x14, 0xc7, 0xcd, 0xdc, 0x8f, 0xf6, 0x0d, 0xeb, 0x7c, 0x17, 0x23, 0x0a, 0x96, 0x9e, 0x8a, 0x87,
-	0x1d, 0x14, 0xfc, 0x03, 0x0a, 0xc2, 0xbc, 0x8d, 0x1c, 0xbc, 0x96, 0xd4, 0x84, 0x19, 0xd0, 0x24,
-	0x24, 0x69, 0x87, 0x7f, 0xbb, 0x17, 0x21, 0x6d, 0x37, 0xb6, 0xdb, 0x7b, 0x9f, 0xf7, 0xe1, 0xcb,
-	0xe3, 0x0b, 0x57, 0x3f, 0x32, 0x38, 0xf5, 0xe9, 0xd7, 0xd6, 0x99, 0x60, 0x70, 0x31, 0xac, 0xc5,
-	0x1f, 0x81, 0xd9, 0x5b, 0x27, 0x75, 0xc0, 0x07, 0x48, 0xbd, 0xda, 0x69, 0x1e, 0x5a, 0x27, 0x29,
-	0xc9, 0x49, 0x99, 0xb2, 0x23, 0xc0, 0x7b, 0x48, 0x03, 0x77, 0x3b, 0x19, 0x6a, 0x25, 0xe8, 0x24,
-	0x5e, 0x93, 0x1e, 0xbc, 0x0b, 0x7c, 0x84, 0xa5, 0xf2, 0xb5, 0x75, 0xa6, 0x53, 0x42, 0x3a, 0x7a,
-	0x99, 0x93, 0x32, 0x61, 0xa0, 0xfc, 0x76, 0x20, 0xb8, 0x81, 0x9b, 0x86, 0x6b, 0xb1, 0x57, 0x22,
-	0x7c, 0xd5, 0x96, 0xff, 0x7e, 0x1b, 0x2e, 0xe8, 0x34, 0x27, 0xe5, 0xf2, 0xf9, 0x6e, 0x3d, 0x7e,
-	0x56, 0x8d, 0xc6, 0xb6, 0x17, 0x36, 0x17, 0x6c, 0xd5, 0x9c, 0x31, 0xac, 0xe0, 0xba, 0x93, 0xce,
-	0x2b, 0xa3, 0x0f, 0x39, 0xb3, 0x98, 0x73, 0x7b, 0xc8, 0xf9, 0xe8, 0xef, 0xc7, 0x94, 0xac, 0x3b,
-	0x21, 0x55, 0x02, 0xf3, 0xde, 0x2d, 0x9e, 0x20, 0x3b, 0xb5, 0x91, 0xc2, 0x62, 0xb0, 0x87, 0x0e,
-	0xc6, 0xb5, 0x78, 0x85, 0xd5, 0xf9, 0x87, 0x98, 0xc1, 0xa4, 0xb5, 0x51, 0x24, 0x6c, 0xd2, 0x5a,
-	0x44, 0x98, 0x0a, 0xb3, 0xd7, 0xb1, 0x20, 0xc2, 0xe2, 0xdc, 0xcc, 0x63, 0xe3, 0x2f, 0xff, 0x01,
-	0x00, 0x00, 0xff, 0xff, 0xff, 0xe7, 0x7f, 0x75, 0x82, 0x01, 0x00, 0x00,
+	// 400 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x93, 0xdf, 0xaa, 0xd3, 0x40,
+	0x10, 0xc6, 0x4d, 0x4c, 0xff, 0x64, 0x6a, 0x53, 0xd8, 0x2a, 0x06, 0xad, 0xd8, 0x06, 0xc4, 0xe2,
+	0x45, 0x41, 0x7d, 0x83, 0x8a, 0xa0, 0x77, 0x65, 0x2b, 0x5e, 0x1a, 0xd2, 0x64, 0x28, 0x0b, 0x36,
+	0x09, 0x3b, 0xdb, 0x40, 0x9e, 0x43, 0x7c, 0x47, 0x1f, 0x43, 0xba, 0x7f, 0x12, 0xeb, 0x39, 0xbd,
+	0x39, 0x97, 0xfb, 0x9b, 0x6f, 0xbf, 0xd9, 0x6f, 0x32, 0x81, 0xe9, 0x09, 0x95, 0x14, 0x39, 0x6d,
+	0x6a, 0x59, 0xa9, 0x8a, 0x8d, 0xec, 0x31, 0xf9, 0xe3, 0xc3, 0xe0, 0x73, 0x83, 0xa5, 0x62, 0x0b,
+	0x08, 0x49, 0x1c, 0xcb, 0x4c, 0x9d, 0x25, 0xc6, 0xde, 0xd2, 0x5b, 0x87, 0xbc, 0x07, 0xec, 0x25,
+	0x84, 0x2a, 0x93, 0x47, 0x54, 0xa9, 0x28, 0x62, 0x5f, 0x57, 0xc7, 0x06, 0x7c, 0x2d, 0xd8, 0x6b,
+	0x98, 0x08, 0x4a, 0x6b, 0x59, 0x35, 0xa2, 0x40, 0x19, 0x3f, 0x5e, 0x7a, 0xeb, 0x31, 0x07, 0x41,
+	0x3b, 0x4b, 0xd8, 0x16, 0x66, 0x0d, 0x4a, 0x12, 0x55, 0x99, 0xd6, 0x59, 0xfb, 0xb3, 0xca, 0x8a,
+	0x38, 0x58, 0x7a, 0xeb, 0xc9, 0x87, 0xe7, 0x1b, 0xf7, 0xae, 0xef, 0xa6, 0xbe, 0x33, 0xe5, 0x2f,
+	0x8f, 0x78, 0xd4, 0x5c, 0x11, 0xc6, 0xe1, 0x19, 0x21, 0x69, 0x0f, 0xbc, 0x3c, 0xb8, 0x73, 0x1a,
+	0x68, 0xa7, 0x45, 0xe7, 0xb4, 0x37, 0x2a, 0x9d, 0xaa, 0xb7, 0x9b, 0xd3, 0x5d, 0xcc, 0x32, 0x78,
+	0xe1, 0x3c, 0x49, 0x65, 0x4a, 0x90, 0x12, 0x39, 0x75, 0xc6, 0x43, 0x6d, 0xbc, 0xfa, 0xdf, 0x78,
+	0xdf, 0x29, 0x7b, 0xf7, 0x98, 0x6e, 0xd4, 0xb6, 0x63, 0x18, 0x9a, 0xfb, 0xc9, 0x3b, 0x88, 0xae,
+	0x43, 0xb2, 0x18, 0x46, 0x36, 0xa4, 0x1d, 0xb8, 0x3b, 0x26, 0x3f, 0x60, 0x7e, 0x4f, 0x0c, 0xf6,
+	0x1e, 0x46, 0xb6, 0x91, 0xbe, 0xf0, 0xef, 0xfc, 0xac, 0xdc, 0x2a, 0xb9, 0xd3, 0xb1, 0xa7, 0x30,
+	0xd0, 0xe3, 0xb2, 0x1f, 0xcd, 0x1c, 0x92, 0x5f, 0x1e, 0xc4, 0xb7, 0xe2, 0x3c, 0xa4, 0xcb, 0x2b,
+	0x80, 0x43, 0xab, 0x90, 0x52, 0x72, 0xad, 0x02, 0x1e, 0x6a, 0xb2, 0xbf, 0xec, 0xd6, 0x1b, 0x88,
+	0x4c, 0x59, 0x62, 0x8e, 0xa2, 0xc1, 0x42, 0xef, 0x48, 0xc0, 0xa7, 0x9a, 0x72, 0x0b, 0x93, 0xdf,
+	0x1e, 0x44, 0xd7, 0x1d, 0x58, 0x04, 0xbe, 0x28, 0xec, 0x74, 0x7c, 0x51, 0xb0, 0x15, 0x3c, 0x21,
+	0x94, 0x8d, 0xc8, 0x31, 0x55, 0x6d, 0x8d, 0x36, 0xd5, 0xc4, 0xb2, 0x6f, 0x6d, 0x8d, 0xec, 0x2d,
+	0xcc, 0xdc, 0x2a, 0xa6, 0x79, 0x55, 0x2a, 0xd9, 0xea, 0x6e, 0x21, 0x8f, 0x1c, 0xfe, 0xa4, 0xe9,
+	0x45, 0x98, 0x57, 0x25, 0x9d, 0x4f, 0xbd, 0x30, 0x30, 0x42, 0x87, 0x8d, 0xf0, 0x30, 0xd4, 0x3f,
+	0xcd, 0xc7, 0xbf, 0x01, 0x00, 0x00, 0xff, 0xff, 0x13, 0xcf, 0x09, 0x38, 0x45, 0x03, 0x00, 0x00,
 }
