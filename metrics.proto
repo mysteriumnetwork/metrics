@@ -2,6 +2,10 @@ syntax="proto3";
 
 package metrics;
 
+message Batch {
+    repeated Event events = 1;
+}
+
 message Event {
     string signature = 1;
     string target_id = 2;
@@ -10,11 +14,14 @@ message Event {
         VersionPayload version_payload = 4;
         SessionEventPayload session_event_payload = 5;
         SessionStatisticsPayload session_statistics_payload = 6;
+        ProposalPayload proposal_payload = 7;
     }
 }
 
 message VersionPayload {
     string version = 1;
+    string os = 2;
+    string arch = 3;
 }
 
 message SessionEventPayload {
@@ -33,4 +40,10 @@ message SessionPayload {
     string service_type = 2;
     string provider_contry = 3;
     string consumer_contry = 4;
+}
+
+message ProposalPayload {
+    string provider_id = 1;
+    string service_type = 2;
+    VersionPayload version = 3;
 }
