@@ -46,4 +46,6 @@ message ProposalPayload {
     string provider_id = 1;
     string service_type = 2;
     VersionPayload version = 3;
+    string node_type = 4;
+    string country = 5;
 }
