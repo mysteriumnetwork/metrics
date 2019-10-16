@@ -15,8 +15,7 @@ message Event {
         SessionEventPayload session_event_payload = 5;
         SessionStatisticsPayload session_statistics_payload = 6;
         ProposalPayload proposal_payload = 7;
-        SessionConnectError session_connect_error_payload = 8;
-        SessionConnectSuccess session_connect_success_payload = 9;
+        SessionConnectivityStatus session_connectivity_status_payload = 8;
     }
 }
 
@@ -52,11 +51,7 @@ message ProposalPayload {
     string country = 5;
 }
 
-message SessionConnectError {
+message SessionConnectivityStatus {
     SessionPayload session = 1;
-    string reason = 2;
-}
-
-message SessionConnectSuccess {
-    SessionPayload session = 1;
+    string status = 2;
 }
