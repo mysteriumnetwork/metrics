@@ -15,6 +15,7 @@ message Event {
         SessionEventPayload session_event_payload = 5;
         SessionStatisticsPayload session_statistics_payload = 6;
         ProposalPayload proposal_payload = 7;
+        SessionConnectivityStatus session_connectivity_status_payload = 8;
     }
 }
 
@@ -48,4 +49,9 @@ message ProposalPayload {
     VersionPayload version = 3;
     string node_type = 4;
     string country = 5;
+}
+
+message SessionConnectivityStatus {
+    SessionPayload session = 1;
+    string status = 2;
 }
