@@ -10,9 +10,9 @@ After protoc compiler is installed run `make install-protoc-gen-go` which will i
 
 ## Compile to go
 
-2. Update metrics.proto contracts according to your needs.
+1. Update metrics.proto contracts according to your needs.
 
-3. Compile proto to go.
+2. Compile proto to go.
 
 ```sh
 make compile-proto
