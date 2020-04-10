@@ -15,6 +15,7 @@ message Event {
         SessionEventPayload session_event_payload = 5;
         SessionStatisticsPayload session_statistics_payload = 6;
         ProposalPayload proposal_payload = 7;
+        SessionTokensPayload session_tokens_payload = 8;
     }
 }
 
@@ -35,11 +36,17 @@ message SessionStatisticsPayload {
     uint64 bytes_received = 3;
 }
 
+message SessionTokensPayload {
+    SessionPayload session = 1;
+    uint64 tokens = 2;
+}
+
 message SessionPayload {
     string id = 1;
     string service_type = 2;
     string provider_contry = 3;
     string consumer_contry = 4;
+    string accountant_address = 5;
 }
 
 message ProposalPayload {
