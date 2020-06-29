@@ -16,6 +16,7 @@ message Event {
         SessionStatisticsPayload session_statistics_payload = 6;
         ProposalPayload proposal_payload = 7;
         SessionTokensPayload session_tokens_payload = 8;
+        SessionTracePayload session_trace_payload = 9;
     }
 }
 
@@ -55,4 +56,11 @@ message ProposalPayload {
     VersionPayload version = 3;
     string node_type = 4;
     string country = 5;
+}
+
+message SessionTracePayload {
+    SessionPayload session = 1;
+    VersionPayload version = 2;
+    uint64 duration = 3;
+    string stage = 4;
 }
