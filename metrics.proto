@@ -39,7 +39,7 @@ message SessionStatisticsPayload {
 
 message SessionTokensPayload {
     SessionPayload session = 1;
-    uint64 tokens = 2;
+    string tokens = 2;
 }
 
 message SessionPayload {
