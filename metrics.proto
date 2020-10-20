@@ -17,6 +17,7 @@ message Event {
         ProposalPayload proposal_payload = 7;
         SessionTokensPayload session_tokens_payload = 8;
         SessionTracePayload session_trace_payload = 9;
+        RegistrationPayload registration_payload = 10;
     }
 }
 
@@ -63,4 +64,11 @@ message SessionTracePayload {
     VersionPayload version = 2;
     uint64 duration = 3;
     string stage = 4;
+}
+
+message RegistrationPayload {
+    VersionPayload version = 1;
+    string country = 2;
+    string identity = 3;
+    string status = 4;
 }
