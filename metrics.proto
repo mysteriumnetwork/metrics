@@ -40,7 +40,7 @@ message SessionStatisticsPayload {
 
 message SessionTokensPayload {
     SessionPayload session = 1;
-    uint64 tokens = 2;
+    string tokens = 2;
 }
 
 message SessionPayload {
@@ -69,6 +69,5 @@ message SessionTracePayload {
 message RegistrationPayload {
     VersionPayload version = 1;
     string country = 2;
-    string identity = 3;
-    string status = 4;
+    string status = 3;
 }
