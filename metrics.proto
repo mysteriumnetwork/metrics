@@ -18,7 +18,14 @@ message Event {
         SessionTokensPayload session_tokens_payload = 8;
         SessionTracePayload session_trace_payload = 9;
         RegistrationPayload registration_payload = 10;
+        NatMappingPayload nat_mapping_payload = 11;
     }
+}
+
+message NatMappingPayload {
+    string err = 1;
+    string stage = 2;
+    bool successful = 3;
 }
 
 message VersionPayload {
