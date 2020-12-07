@@ -54,8 +54,8 @@ message SessionTokensPayload {
 message SessionPayload {
     string id = 1;
     string service_type = 2;
-    string provider_contry = 3;
-    string consumer_contry = 4;
+    string provider_country = 3;
+    string consumer_country = 4;
     string accountant_id = 5;
 }
 
