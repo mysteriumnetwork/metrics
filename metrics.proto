@@ -26,6 +26,7 @@ message NatMappingPayload {
     string err = 1;
     string stage = 2;
     bool successful = 3;
+    VersionPayload version = 4;
 }
 
 message VersionPayload {
