@@ -19,6 +19,7 @@ message Event {
         SessionTracePayload session_trace_payload = 9;
         RegistrationPayload registration_payload = 10;
         NatMappingPayload nat_mapping_payload = 11;
+        ConnectionEvent connection_event = 12;
     }
 }
 
@@ -78,4 +79,14 @@ message RegistrationPayload {
     VersionPayload version = 1;
     string country = 2;
     string status = 3;
+}
+
+message ConnectionEvent{
+    VersionPayload version = 1;
+    string service_type = 2;
+    string provider_id = 3;
+    string consumer_id = 4;
+    string hermes_id = 5;
+    string error = 6;
+    string stage = 7;
 }
