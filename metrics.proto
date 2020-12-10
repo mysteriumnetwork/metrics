@@ -57,7 +57,7 @@ message SessionPayload {
     string service_type = 2;
     string provider_country = 3;
     string consumer_country = 4;
-    string accountant_id = 5;
+    string hermes_id = 5;
 }
 
 message ProposalPayload {
