@@ -13,7 +13,7 @@ message Event {
     string target_id = 2;
     bool is_provider = 3;
 
-    VersionPayload version_payload = 4;
+    VersionPayload version = 4;
     string country = 5;
 
     oneof metric{
