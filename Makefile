@@ -1,6 +1,7 @@
 .PHONY: install-protoc-gen-go compile-proto
 
 PROTOC_VERSION="v1.3.1"
+GOPATH = $(shell go env GOPATH)
 
 install-protoc-gen-go:
 	@go get -u github.com/golang/protobuf/protoc-gen-go
@@ -8,4 +9,4 @@ install-protoc-gen-go:
 	@go install github.com/golang/protobuf/protoc-gen-go
 
 compile-proto:
-	@protoc --go_out=. metrics.proto
+	@protoc --go_out="$(GOPATH)/src" metrics.proto
