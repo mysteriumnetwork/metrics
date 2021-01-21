@@ -2,6 +2,8 @@ syntax="proto3";
 
 package metrics;
 
+option go_package = "github.com/mysteriumnetwork/metrics";
+
 message Batch {
     repeated Event events = 1;
 }
@@ -10,16 +12,19 @@ message Event {
     string signature = 1;
     string target_id = 2;
     bool is_provider = 3;
+
+    VersionPayload version_payload = 4;
+    string country = 5;
+
     oneof metric{
-        VersionPayload version_payload = 4;
-        SessionEventPayload session_event_payload = 5;
-        SessionStatisticsPayload session_statistics_payload = 6;
-        ProposalPayload proposal_payload = 7;
-        SessionTokensPayload session_tokens_payload = 8;
-        SessionTracePayload session_trace_payload = 9;
-        RegistrationPayload registration_payload = 10;
-        NatMappingPayload nat_mapping_payload = 11;
-        ConnectionEvent connection_event = 12;
+        SessionEventPayload session_event_payload = 6;
+        SessionStatisticsPayload session_statistics_payload = 7;
+        ProposalPayload proposal_payload = 8;
+        SessionTokensPayload session_tokens_payload = 9;
+        SessionTracePayload session_trace_payload = 10;
+        RegistrationPayload registration_payload = 11;
+        NatMappingPayload nat_mapping_payload = 12;
+        ConnectionEvent connection_event = 13;
     }
 }
 
@@ -27,7 +32,6 @@ message NatMappingPayload {
     string err = 1;
     string stage = 2;
     bool successful = 3;
-    VersionPayload version = 4;
 }
 
 message VersionPayload {
@@ -55,38 +59,29 @@ message SessionTokensPayload {
 message SessionPayload {
     string id = 1;
     string service_type = 2;
-    string provider_country = 3;
-    string consumer_country = 4;
-    string hermes_id = 5;
+    string remote_country = 3;
+    string hermes_id = 4;
 }
 
 message ProposalPayload {
-    string provider_id = 1;
-    string service_type = 2;
-    VersionPayload version = 3;
-    string node_type = 4;
-    string country = 5;
+    string service_type = 1;
+    string node_type = 2;
 }
 
 message SessionTracePayload {
     SessionPayload session = 1;
-    VersionPayload version = 2;
-    uint64 duration = 3;
-    string stage = 4;
+    uint64 duration = 2;
+    string stage = 3;
 }
 
 message RegistrationPayload {
-    VersionPayload version = 1;
-    string country = 2;
-    string status = 3;
+    string status = 1;
 }
 
 message ConnectionEvent{
-    VersionPayload version = 1;
-    string service_type = 2;
-    string provider_id = 3;
-    string consumer_id = 4;
-    string hermes_id = 5;
-    string error = 6;
-    string stage = 7;
+    string service_type = 1;
+    string hermes_id = 2;
+    string remote_country = 3;
+    string error = 4;
+    string stage = 5;
 }
