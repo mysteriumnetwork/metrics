@@ -25,6 +25,7 @@ message Event {
         RegistrationPayload registration_payload = 11;
         NatMappingPayload nat_mapping_payload = 12;
         ConnectionEvent connection_event = 13;
+        PingPayload ping_event = 14;
     }
 }
 
@@ -84,4 +85,10 @@ message ConnectionEvent{
     string remote_country = 3;
     string error = 4;
     string stage = 5;
+}
+
+message PingPayload {
+    string session_id = 1;
+    string remote_country = 3;
+    uint64 duration = 4;
 }
