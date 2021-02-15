@@ -50,6 +50,7 @@ message SessionStatisticsPayload {
     SessionPayload session = 1;
     uint64 bytes_sent = 2;
     uint64 bytes_received = 3;
+    uint64 duration = 4;
 }
 
 message SessionTokensPayload {
