@@ -26,6 +26,7 @@ message Event {
         NatMappingPayload nat_mapping_payload = 12;
         ConnectionEvent connection_event = 13;
         PingPayload ping_event = 14;
+        ResidentCountryPayload  resident_country = 15;
     }
 }
 
@@ -92,4 +93,8 @@ message PingPayload {
     string session_id = 1;
     string remote_country = 3;
     uint64 duration = 4;
+}
+
+message ResidentCountryPayload{
+    string country = 1;
 }
