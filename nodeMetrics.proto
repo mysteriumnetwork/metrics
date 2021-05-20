@@ -27,7 +27,13 @@ message Event {
         ConnectionEvent connection_event = 13;
         PingPayload ping_event = 14;
         ResidentCountryPayload  resident_country = 15;
+        STUNDetectionPayload stun_detection = 16;
+
     }
+}
+
+message STUNDetectionPayload {
+    string type = 1;
 }
 
 message NatMappingPayload {
