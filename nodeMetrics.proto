@@ -28,7 +28,7 @@ message Event {
         PingPayload ping_event = 14;
         ResidentCountryPayload  resident_country = 15;
         STUNDetectionPayload stun_detection = 16;
-
+        NatMethodResult nat_method = 17;
     }
 }
 
@@ -103,4 +103,9 @@ message PingPayload {
 
 message ResidentCountryPayload{
     string country = 1;
+}
+
+message NatMethodResult {
+    string method = 1;
+    bool success = 2;
 }
