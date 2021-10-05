@@ -46,6 +46,8 @@ message VersionPayload {
     string version = 1;
     string os = 2;
     string arch = 3;
+    string launcher_version = 4;
+    string host_os = 5;
 }
 
 message SessionEventPayload {
