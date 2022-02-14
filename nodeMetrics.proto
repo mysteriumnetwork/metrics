@@ -4,6 +4,11 @@ package metrics;
 
 option go_package = "github.com/mysteriumnetwork/metrics";
 
+message SignedBatch {
+    string signature = 1;
+    Batch batch = 2;
+}
+
 message Batch {
     repeated Event events = 1;
 }
